@@ -1,0 +1,40 @@
+{
+  "name": "nodejs-playground",
+  "version": "1.0.0",
+  "description": "NodeJS Playground",
+  "homepage": "https://github.com/nhannguyenuri/nodejs-playground#readme",
+  "bugs": {
+    "url": "https://github.com/nhannguyenuri/nodejs-playground/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nhannguyenuri/nodejs-playground.git"
+  },
+  "license": "MIT",
+  "author": "hoainhaannguyen@gmail.com",
+  "type": "module",
+  "main": "index.js",
+  "engines": {
+    "node": "24.x"
+  },
+  "scripts": {
+    "start": "node --env-file .env index.js",
+    "watch": "node --env-file .env --watch index.js"
+  },
+  "dependencies": {
+    "compression": "^1.8.1",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "mongoose": "^9.2.2",
+    "multer": "^2.0.2",
+    "swagger-jsdoc": "^6.2.8",
+    "swagger-ui-express": "^5.0.1",
+    "winston": "^3.19.0",
+    "zod": "^4.3.6"
+  },
+  "devDependencies": {
+    "prettier": "^3.8.1"
+  }
+}

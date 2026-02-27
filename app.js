@@ -7,6 +7,7 @@ import multer from 'multer';
 import path from 'node:path';
 import { V1Router } from './routes/v1/v1.js';
 import { bootstrap as bootstrapLoggerService, Logger } from './services/logger/logger.js';
+import { resJSON } from './utils/req/req.js';
 
 const __dirname = path.resolve();
 
@@ -32,9 +33,7 @@ app.use('/api/v1', V1Router);
 
 // Not found handler
 app.use((req, res) => {
-  Logger.log('error', `[${req.ip}] ${req.method} ${req.originalUrl} 404`);
-
-  res.status(404).json({ message: 'Not found' });
+  resJSON(req, res, 404, { message: 'Not found' });
 });
 
 // Use helmet middleware after api-docs route

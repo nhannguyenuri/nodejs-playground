@@ -1,5 +1,5 @@
 import express from 'express';
-import { Logger } from '../../../services/logger/logger.js';
+import { resJSON } from '../../../utils/req/req.js';
 
 const router = express.Router();
 
@@ -21,12 +21,7 @@ const router = express.Router();
  *        description: Internal Server Error.
  */
 router.get('/', async (req, res) => {
-  Logger.log('info', `[${req.ip}] ${req.method} ${req.originalUrl}`);
-
-  res.status(200).json({
-    success: true,
-    data: 'pong',
-  });
+  resJSON(req, res, 200, 'pong');
 });
 
 export { router as PingRouter };

@@ -52,6 +52,16 @@ postgres://admin:admin@localhost:5432/mydb?schema=public
 docker run -d --network my-network --name my-redis -p 6379:6379 redis:latest
 ```
 
+### Keycloak
+
+```bash
+docker run -d --name keycloak --network my-network -p 8080:8080 -p 8443:8443 -p 9000:9000 -e KC_BOOTSTRAP_ADMIN_USERNAME=admin -e KC_BOOTSTRAP_ADMIN_PASSWORD=P@ssw0rd quay.io/keycloak/keycloak start-dev
+```
+
+Keycloak Admin Console: <http://localhost:8080/admin>
+
+Keycloak Account Console: <http://localhost:8080/realms/myrealm/account>
+
 ## Coding Naming Conventions
 
 ➖ PascalCase 👉 Classes and Methods

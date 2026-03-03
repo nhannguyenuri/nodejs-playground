@@ -8,6 +8,8 @@ import path from 'node:path';
 import { V1Router } from './routes/v1/v1.js';
 import { bootstrap as bootstrapLoggerService, Logger } from './services/logger/logger.js';
 import { resJSON } from './utils/req/req.js';
+import { cacheControlNoStore } from './middleware/cache-control.js';
+import { rateLimitRequest } from './middleware/request-limiter.js';
 
 const __dirname = path.resolve();
 
@@ -24,6 +26,8 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.raw({ limit: '50mb' }));
 app.use(express.text({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(cacheControlNoStore);
+app.use(rateLimitRequest());
 
 // Static files
 app.use(express.static(path.join(__dirname, 'public')));

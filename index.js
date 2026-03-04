@@ -1,6 +1,6 @@
 import process from 'node:process';
 import http from 'node:http';
-import { Logger } from './services/logger/logger.js';
+import { Logger } from './utils/logger/logger.js';
 import { cleanUp } from './cleanup.js';
 import app from './app.js';
 

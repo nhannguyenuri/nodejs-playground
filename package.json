@@ -22,12 +22,16 @@
     "watch": "node --env-file .env --watch index.js"
   },
   "dependencies": {
+    "@bull-board/api": "^6.20.3",
+    "@bull-board/express": "^6.20.3",
+    "bullmq": "^5.70.1",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "express-rate-limit": "^8.2.1",
     "helmet": "^8.1.0",
+    "ioredis": "^5.10.0",
     "mongoose": "^9.2.3",
     "multer": "^2.0.2",
     "swagger-jsdoc": "^6.2.8",

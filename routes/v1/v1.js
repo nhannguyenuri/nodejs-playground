@@ -1,6 +1,7 @@
 import express from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
+import { serverAdapter as bullmqServerAdapter } from '../../config/bullmq/bullmq.js';
 import { PingRouter } from './controllers/ping.js';
 
 const swaggerJsdocOptions = {
@@ -37,6 +38,13 @@ appRoutes.push({
   method: '',
   path: '/ping',
   router: PingRouter,
+});
+
+// BullMQ routes
+appRoutes.push({
+  method: '',
+  path: '/admin/queues',
+  router: bullmqServerAdapter.getRouter(),
 });
 
 // Swagger routes

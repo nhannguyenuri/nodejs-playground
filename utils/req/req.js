@@ -1,4 +1,4 @@
-import { Logger } from '../../services/logger/logger.js';
+import { Logger } from '../../utils/logger/logger.js';
 
 /**
  * @param {*} req

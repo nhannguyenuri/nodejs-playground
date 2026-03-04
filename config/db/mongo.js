@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { Logger } from '../../services/logger/logger.js';
+import { Logger } from '../../utils/logger/logger.js';
 
 const connect = async () => {
   const uri = process.env.MONGO_URI;
@@ -17,8 +17,8 @@ const connect = async () => {
   await mongoose.connect(uri);
 };
 
-const bootstrapMongo = async () => {
+const bootstrap = async () => {
   await connect();
 };
 
-export { bootstrapMongo, mongoose };
+export { bootstrap, mongoose };

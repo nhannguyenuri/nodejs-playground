@@ -6,17 +6,21 @@ import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import multer from 'multer';
 import path from 'node:path';
-import { bootstrapMongo } from './config/db/mongo.js';
+import { bootstrap as bootstrapBullMQ } from './config/bullmq/bullmq.js';
+import { bootstrap as bootstrapMongo } from './config/db/mongo.js';
+import { bootstrap as bootstrapRedis } from './config/db/redis.js';
 import { cacheControlNoStore } from './middlewares/cache-control.js';
 import { V1Router } from './routes/v1/v1.js';
-import { bootstrap as bootstrapLoggerService } from './services/logger/logger.js';
+import { bootstrap as bootstrapLogger } from './utils/logger/logger.js';
 import { resJSON } from './utils/req/req.js';
 
 const __dirname = path.resolve();
 
 // Bootstrapping
-await bootstrapLoggerService();
+await bootstrapLogger();
 await bootstrapMongo();
+await bootstrapRedis();
+await bootstrapBullMQ();
 
 const app = express();
 

@@ -1,8 +1,9 @@
-import process from 'node:process';
+import 'dotenv/config';
 import http from 'node:http';
-import { Logger } from './utils/logger/logger.js';
-import { cleanUp } from './cleanup.js';
+import process from 'node:process';
 import app from './app.js';
+import { cleanUp } from './cleanup.js';
+import { Logger } from './utils/logger/logger.js';
 
 const server = http.createServer(app);
 

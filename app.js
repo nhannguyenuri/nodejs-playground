@@ -2,19 +2,21 @@ import compression from 'compression';
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import multer from 'multer';
 import path from 'node:path';
+import { bootstrapMongo } from './config/db/mongo.js';
+import { cacheControlNoStore } from './middlewares/cache-control.js';
 import { V1Router } from './routes/v1/v1.js';
-import { bootstrap as bootstrapLoggerService, Logger } from './services/logger/logger.js';
+import { bootstrap as bootstrapLoggerService } from './services/logger/logger.js';
 import { resJSON } from './utils/req/req.js';
-import { cacheControlNoStore } from './middleware/cache-control.js';
-import { rateLimitRequest } from './middleware/request-limiter.js';
 
 const __dirname = path.resolve();
 
 // Bootstrapping
 await bootstrapLoggerService();
+await bootstrapMongo();
 
 const app = express();
 
@@ -27,7 +29,14 @@ app.use(express.raw({ limit: '50mb' }));
 app.use(express.text({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.use(cacheControlNoStore);
-app.use(rateLimitRequest());
+app.use(
+  rateLimit({
+    windowMs: 1 * 69 * 1000, // 1 minute
+    max: 1000, // Limit each IP to 1000 requests per `window` (here, per minute)
+    standardHeaders: true,
+    legacyHeaders: false,
+  })
+);
 
 // Static files
 app.use(express.static(path.join(__dirname, 'public')));

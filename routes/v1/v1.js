@@ -1,7 +1,7 @@
 import express from 'express';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
-import { PingRouter } from './ping/ping-ctrl.js';
+import { PingRouter } from './controllers/ping.js';
 
 const swaggerJsdocOptions = {
   definition: {

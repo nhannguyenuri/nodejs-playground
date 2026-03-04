@@ -1,5 +1,6 @@
 import express from 'express';
 import { resJSON } from '../../../utils/req/req.js';
+import { getPing } from '../models/ping.js';
 
 const router = express.Router();
 
@@ -21,7 +22,13 @@ const router = express.Router();
  *        description: Internal Server Error.
  */
 router.get('/', async (req, res) => {
-  resJSON(req, res, 200, 'pong');
+  const result = await getPing();
+
+  if (result.error instanceof Error) {
+    resJSON(req, res, 500, 'Internal Server Error');
+  } else {
+    resJSON(req, res, 200, result);
+  }
 });
 
 export { router as PingRouter };

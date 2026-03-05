@@ -37,6 +37,8 @@ mongodb://admin:admin@localhost:27017/
 ```bash
 docker run --name my-postgres --network my-network -p 5432:5432 -e POSTGRES_DB=mydb -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin -d postgres:latest
 
+docker run -d --name pgadmin4 -p 5050:80 --network my-network -e PGADMIN_DEFAULT_EMAIL=admin@admin.com -e PGADMIN_DEFAULT_PASSWORD=admin dpage/pgadmin4:latest
+
 docker exec -it my-postgres psql -U admin -d mydb
 ```
 

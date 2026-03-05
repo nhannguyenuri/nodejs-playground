@@ -8,6 +8,7 @@ import multer from 'multer';
 import path from 'node:path';
 import { bootstrap as bootstrapBullMQ } from './config/bullmq/bullmq.js';
 import { bootstrap as bootstrapMongo } from './config/db/mongo.js';
+import { bootstrap as bootstrapPostgres } from './config/db/postgres.js';
 import { bootstrap as bootstrapRedis } from './config/db/redis.js';
 import { cacheControlNoStore } from './middlewares/cache-control.js';
 import { V1Router } from './routes/v1/v1.js';
@@ -19,6 +20,7 @@ const __dirname = path.resolve();
 // Bootstrapping
 await bootstrapLogger();
 await bootstrapMongo();
+await bootstrapPostgres();
 await bootstrapRedis();
 await bootstrapBullMQ();
 

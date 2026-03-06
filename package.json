@@ -24,6 +24,7 @@
   "dependencies": {
     "@bull-board/api": "^6.20.3",
     "@bull-board/express": "^6.20.3",
+    "@keycloak/keycloak-admin-client": "^26.5.5",
     "bullmq": "^5.70.1",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",

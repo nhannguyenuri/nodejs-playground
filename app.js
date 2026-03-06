@@ -10,6 +10,7 @@ import { bootstrap as bootstrapBullMQ } from './config/bullmq/bullmq.js';
 import { bootstrap as bootstrapMongo } from './config/db/mongo.js';
 import { bootstrap as bootstrapPostgres } from './config/db/postgres.js';
 import { bootstrap as bootstrapRedis } from './config/db/redis.js';
+import { bootstrap as bootstrapKeycloakAdminClient } from './config/keycloak/keycloak.js';
 import { cacheControlNoStore } from './middlewares/cache-control.js';
 import { verifyToken } from './middlewares/keycloak.js';
 import { V1Router } from './routes/v1/v1.js';
@@ -24,6 +25,7 @@ await bootstrapMongo();
 await bootstrapPostgres();
 await bootstrapRedis();
 await bootstrapBullMQ();
+await bootstrapKeycloakAdminClient();
 
 const app = express();
 

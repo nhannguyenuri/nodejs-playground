@@ -1,0 +1,48 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "NodeJS Playground API Documentation",
+    "version": "1.0.0",
+    "description": "This is a RESTful API application made with Express.",
+    "license": {
+      "name": "Licensed Under MIT",
+      "url": "https://github.com/nhannguyendevjs/nodejs-playground/blob/master/LICENSE"
+    },
+    "contact": {
+      "name": "Nhan Nguyen",
+      "url": "https://github.com/nhannguyendevjs"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000/api/v1",
+      "description": ""
+    }
+  ],
+  "paths": {
+    "/ping": {
+      "get": {
+        "description": "Ping API to check if server is online.",
+        "tags": [
+          "Ping"
+        ],
+        "responses": {
+          "200": {
+            "description": "Server is online and returns a server status object."
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "tags": []
+}

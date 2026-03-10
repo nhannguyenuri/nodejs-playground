@@ -9,6 +9,7 @@ const verifyToken = async (req, res, next) => {
     const authHeader = req.headers.authorization;
 
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
+      Logger.log('error', 'Missing access token');
       return res.status(401).json({ message: 'Missing access token' });
     }
 

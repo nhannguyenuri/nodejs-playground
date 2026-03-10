@@ -1,7 +1,9 @@
 import express from 'express';
+import fs from 'node:fs';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { serverAdapter as bullmqServerAdapter } from '../../config/bullmq/bullmq.js';
+import { Logger } from '../../utils/logger/logger.js';
 import { PingRouter } from './controllers/ping.js';
 
 const swaggerJsdocOptions = {
@@ -27,7 +29,7 @@ const swaggerJsdocOptions = {
       },
     ],
   },
-  apis: ['./routes/v1/ping/*-ctrl.js'],
+  apis: ['./routes/v1/controllers/*.js'],
 };
 
 const appRouter = express.Router();
@@ -58,6 +60,10 @@ appRoutes.push({
   path: '/api-docs',
   router: swaggerUi.setup(swaggerJsdoc(swaggerJsdocOptions)),
 });
+
+// Generate Swagger API documentation and save it to a JSON file
+fs.writeFileSync('./docs/api-docs.json', JSON.stringify(swaggerJsdoc(swaggerJsdocOptions), null, 2));
+Logger.info('Swagger API documentation generated at ./api-docs.json');
 
 appRoutes.forEach((route) => {
   const { method, path, router } = route;

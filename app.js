@@ -12,7 +12,6 @@ import { bootstrap as bootstrapPostgres } from './config/db/postgres.js';
 import { bootstrap as bootstrapRedis } from './config/db/redis.js';
 import { bootstrap as bootstrapKeycloakAdminClient } from './config/keycloak/keycloak.js';
 import { cacheControlNoStore } from './middlewares/cache-control.js';
-import { verifyToken } from './middlewares/keycloak.js';
 import { V1Router } from './routes/v1/v1.js';
 import { bootstrap as bootstrapLogger } from './utils/logger/logger.js';
 import { resJSON } from './utils/req/req.js';
@@ -49,9 +48,10 @@ app.use(
 
 // Static files
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'docs')));
 
 // API v1 routes
-app.use('/api/v1', verifyToken, V1Router);
+app.use('/api/v1', V1Router);
 
 // Not found handler
 app.use((req, res) => {

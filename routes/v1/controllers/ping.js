@@ -1,4 +1,5 @@
 import express from 'express';
+import { verifyToken } from '../../../middlewares/keycloak.js';
 import { resJSON } from '../../../utils/req/req.js';
 import { getPing } from '../models/ping.js';
 
@@ -21,7 +22,7 @@ const router = express.Router();
  *      500:
  *        description: Internal Server Error.
  */
-router.get('/', async (req, res) => {
+router.get('/', verifyToken, async (req, res) => {
   const result = await getPing();
 
   if (result.error instanceof Error) {

@@ -2,11 +2,11 @@ import { Pool } from 'pg';
 import { Logger } from '../../utils/logger/logger.js';
 
 const postgres = new Pool({
-  host: process.env.POSTGRES_HOST || 'localhost',
-  port: process.env.POSTGRES_PORT || 5432,
-  database: process.env.POSTGRES_DB || 'mydb',
-  user: process.env.POSTGRES_USER || 'postgres',
-  password: process.env.POSTGRES_PASSWD || 'mypassword',
+  host: process.env.POSTGRES_HOST ?? 'localhost',
+  port: process.env.POSTGRES_PORT ?? 5432,
+  database: process.env.POSTGRES_DB ?? 'mydb',
+  user: process.env.POSTGRES_USER ?? 'postgres',
+  password: process.env.POSTGRES_PASSWD ?? 'mypassword',
 });
 
 const connect = async () => {

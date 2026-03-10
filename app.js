@@ -33,10 +33,10 @@ app.use(cors());
 app.use(compression());
 app.use(cookieParser());
 app.use(multer().any());
-app.use(express.json({ limit: '50mb' }));
-app.use(express.raw({ limit: '50mb' }));
-app.use(express.text({ limit: '50mb' }));
-app.use(express.urlencoded({ limit: '50mb', extended: true }));
+app.use(express.json({ limit: process.env.REQ_MAX_BODY_SIZE || '50mb' }));
+app.use(express.raw({ limit: process.env.REQ_MAX_BODY_SIZE || '50mb' }));
+app.use(express.text({ limit: process.env.REQ_MAX_BODY_SIZE || '50mb' }));
+app.use(express.urlencoded({ limit: process.env.REQ_MAX_BODY_SIZE || '50mb', extended: true }));
 app.use(cacheControlNoStore);
 app.use(
   rateLimit({

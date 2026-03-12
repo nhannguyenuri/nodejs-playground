@@ -60,6 +60,7 @@ appRoutes.push({
   path: '/api-docs',
   router: swaggerUi.setup(swaggerJsdoc(swaggerJsdocOptions)),
 });
+Logger.info('Swagger UI available at /api/v1/api-docs/');
 
 // Generate Swagger API documentation and save it to a JSON file
 fs.writeFileSync('./docs/api-docs.json', JSON.stringify(swaggerJsdoc(swaggerJsdocOptions), null, 2));

@@ -72,7 +72,7 @@ const bootstrap = async () => {
     Logger.log('info', `${jobId} has failed with reason ${failedReason}`);
   });
 
-  Logger.log('info', `BullMQ is ready to use`);
+  Logger.log('info', `BullMQ is ready to use. Connect to the dashboard at /api/v1/admin/queues/`);
 };
 
 export { addJobs, bootstrap, serverAdapter };

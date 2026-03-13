@@ -7,72 +7,91 @@ import { connection } from '../db/redis.js';
 import { sampleEvent } from './events/sample.js';
 import { sampleProcessor } from './processors/sample.js';
 
-const appQueue = new Queue('My Queue', { connection });
+const { addJobs, bootstrap, serverAdapter } = (() => {
+  if (process.env.DISABLED_BULLMQ) {
+    Logger.info('BullMQ is disabled');
 
-const serverAdapter = new ExpressAdapter();
+    const addJobs = async (_ = []) => {
+      return;
+    };
 
-const addJobs = async (jobs = []) => {
-  if (jobs.length > 0) {
-    for (const job of jobs) {
-      const { name, data, opts } = job;
-      await appQueue.add(name, data, opts);
-    }
+    const bootstrap = async () => {
+      return;
+    };
+
+    const serverAdapter = null;
+
+    return { addJobs, bootstrap, serverAdapter };
+  } else {
+    const appQueue = new Queue('My Queue', { connection });
+    const serverAdapter = new ExpressAdapter();
+
+    const addJobs = async (jobs = []) => {
+      if (jobs.length > 0) {
+        for (const job of jobs) {
+          const { name, data, opts } = job;
+          await appQueue.add(name, data, opts);
+        }
+      }
+    };
+
+    new Worker(
+      'My Queue',
+      async (job) => {
+        switch (job.name) {
+          case 'initial':
+            Logger.log('info', job.data.message);
+            break;
+          case 'sample-processor':
+            sampleProcessor(job);
+            break;
+          default:
+            Logger.log('info', JSON.stringify(job.data));
+            break;
+        }
+      },
+      { connection }
+    );
+
+    const queueEvents = process.env.DISABLED_BULLMQ ? null : new QueueEvents('My Queue', { connection });
+
+    const bootstrap = async () => {
+      serverAdapter.setBasePath('/api/v1/admin/queues');
+
+      createBullBoard({
+        queues: [new BullMQAdapter(appQueue)],
+        serverAdapter,
+      });
+
+      queueEvents.on('waiting', ({ jobId }) => {
+        Logger.log('info', `A job with ID ${jobId} is waiting`);
+      });
+
+      queueEvents.on('active', ({ jobId, prev }) => {
+        (async () => {
+          Logger.log('info', `Job ${jobId} is now active; previous status was ${prev}`);
+          const job = await appQueue.getJob(jobId);
+          await sampleEvent(job);
+        })();
+      });
+
+      queueEvents.on('completed', ({ jobId, returnvalue }) => {
+        (async () => {
+          Logger.log('info', `${jobId} has completed and returned ${returnvalue}`);
+          const job = await appQueue.getJob(jobId);
+          await job.updateProgress(100);
+        })();
+      });
+
+      queueEvents.on('failed', ({ jobId, failedReason }) => {
+        Logger.log('info', `${jobId} has failed with reason ${failedReason}`);
+      });
+
+      Logger.log('info', `BullMQ is ready to use. Connect to the dashboard at /api/v1/admin/queues/`);
+    };
+
+    return { addJobs, bootstrap, serverAdapter };
   }
-};
-
-new Worker(
-  'My Queue',
-  async (job) => {
-    switch (job.name) {
-      case 'initial':
-        Logger.log('info', job.data.message);
-        break;
-      case 'sample-processor':
-        sampleProcessor(job);
-        break;
-      default:
-        Logger.log('info', JSON.stringify(job.data));
-        break;
-    }
-  },
-  { connection }
-);
-
-const queueEvents = new QueueEvents('My Queue', { connection });
-
-const bootstrap = async () => {
-  serverAdapter.setBasePath('/api/v1/admin/queues');
-
-  createBullBoard({
-    queues: [new BullMQAdapter(appQueue)],
-    serverAdapter,
-  });
-
-  queueEvents.on('waiting', ({ jobId }) => {
-    Logger.log('info', `A job with ID ${jobId} is waiting`);
-  });
-
-  queueEvents.on('active', ({ jobId, prev }) => {
-    (async () => {
-      Logger.log('info', `Job ${jobId} is now active; previous status was ${prev}`);
-      const job = await appQueue.getJob(jobId);
-      await sampleEvent(job);
-    })();
-  });
-
-  queueEvents.on('completed', ({ jobId, returnvalue }) => {
-    (async () => {
-      Logger.log('info', `${jobId} has completed and returned ${returnvalue}`);
-      const job = await appQueue.getJob(jobId);
-      await job.updateProgress(100);
-    })();
-  });
-
-  queueEvents.on('failed', ({ jobId, failedReason }) => {
-    Logger.log('info', `${jobId} has failed with reason ${failedReason}`);
-  });
-
-  Logger.log('info', `BullMQ is ready to use. Connect to the dashboard at /api/v1/admin/queues/`);
-};
+})();
 
 export { addJobs, bootstrap, serverAdapter };

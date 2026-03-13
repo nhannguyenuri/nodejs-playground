@@ -7,14 +7,15 @@ import helmet from 'helmet';
 import multer from 'multer';
 import path from 'node:path';
 import { bootstrap as bootstrapBullMQ } from './config/bullmq/bullmq.js';
-import { bootstrap as bootstrapMongo } from './config/db/mongo.js';
 import { bootstrap as bootstrapPostgres } from './config/db/postgres.js';
+import { bootstrap as bootstrapMongo } from './config/db/mongo.js';
 import { bootstrap as bootstrapRedis } from './config/db/redis.js';
 import { bootstrap as bootstrapKeycloakAdminClient } from './config/keycloak/keycloak.js';
 import { cacheControlNoStore } from './middlewares/cache-control.js';
 import { V1Router } from './routes/v1/v1.js';
-import { bootstrap as bootstrapLogger } from './utils/logger/logger.js';
+import { bootstrap as bootstrapLogger, Logger } from './utils/logger/logger.js';
 import { resJSON } from './utils/req/req.js';
+import { Worker } from 'worker_threads';
 
 const __dirname = path.resolve();
 
@@ -68,5 +69,10 @@ app.use(helmet());
 //     scriptSrc: ["'self'", "'unsafe-inline'"]
 //   }
 // }));
+
+const appWorker = new Worker(__dirname + '/workers/app.js', { workerData: 'ping' });
+appWorker.on('message', (res) => {
+  Logger.log('info', res.data);
+});
 
 export default app;

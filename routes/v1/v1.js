@@ -43,11 +43,13 @@ appRoutes.push({
 });
 
 // BullMQ routes
-appRoutes.push({
-  method: '',
-  path: '/admin/queues',
-  router: bullmqServerAdapter.getRouter(),
-});
+if (bullmqServerAdapter) {
+  appRoutes.push({
+    method: '',
+    path: '/admin/queues',
+    router: bullmqServerAdapter.getRouter(),
+  });
+}
 
 // Swagger routes
 appRoutes.push({

@@ -5,6 +5,11 @@ const issuer = `${process.env.KEYCLOAK_HOST}:${process.env.KEYCLOAK_PORT}/realms
 const JWKS = createRemoteJWKSet(new URL(`${issuer}/protocol/openid-connect/certs`));
 
 const verifyToken = async (req, res, next) => {
+  if (process.env.DISABLED_KEYCLOAK) {
+    next();
+    return;
+  }
+
   try {
     const authHeader = req.headers.authorization;
 

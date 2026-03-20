@@ -16,10 +16,32 @@
   "servers": [
     {
       "url": "http://localhost:3000/api/v1",
-      "description": ""
+      "description": "Local server"
     }
   ],
   "paths": {
+    "/health": {
+      "get": {
+        "description": "Health API to check if server is online.",
+        "tags": [
+          "Health"
+        ],
+        "responses": {
+          "200": {
+            "description": "Server is online and returns a server status object."
+          },
+          "400": {
+            "description": "Bad request."
+          },
+          "404": {
+            "description": "Not found."
+          },
+          "500": {
+            "description": "Internal Server Error."
+          }
+        }
+      }
+    },
     "/ping": {
       "get": {
         "description": "Ping API to check if server is online.",

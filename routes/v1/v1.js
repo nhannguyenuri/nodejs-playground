@@ -4,6 +4,7 @@ import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import { serverAdapter as bullmqServerAdapter } from '../../config/bullmq/bullmq.js';
 import { Logger } from '../../utils/logger/logger.js';
+import { HealthRouter } from './controllers/health.js';
 import { PingRouter } from './controllers/ping.js';
 
 const swaggerJsdocOptions = {
@@ -25,7 +26,7 @@ const swaggerJsdocOptions = {
     servers: [
       {
         url: `http://localhost:3000/api/v1`,
-        description: '',
+        description: 'Local server',
       },
     ],
   },
@@ -40,6 +41,13 @@ appRoutes.push({
   method: '',
   path: '/ping',
   router: PingRouter,
+});
+
+// Health routes
+appRoutes.push({
+  method: '',
+  path: '/health',
+  router: HealthRouter,
 });
 
 // BullMQ routes
